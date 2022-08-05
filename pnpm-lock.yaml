@@ -1,14 +1,22 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/offscreencanvas': ^2019.7.0
   typescript: ^4.6.4
   vite: ^3.0.0
+
+dependencies:
+  '@types/offscreencanvas': 2019.7.0
 
 devDependencies:
   typescript: 4.7.4
   vite: 3.0.3
 
 packages:
+
+  /@types/offscreencanvas/2019.7.0:
+    resolution: {integrity: sha512-PGcyveRIpL1XIqK8eBsmRBt76eFgtzuPiSTyKHZxnGemp2yzGzWpjYKAfK3wIMiU7eH+851yEpiuP8JZerTmWg==}
+    dev: false
 
   /esbuild-android-64/0.14.50:
     resolution: {integrity: sha512-H7iUEm7gUJHzidsBlFPGF6FTExazcgXL/46xxLo6i6bMtPim6ZmXyTccS8yOMpy6HAC6dPZ/JCQqrkkin69n6Q==}

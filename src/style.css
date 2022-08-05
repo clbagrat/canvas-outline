@@ -100,8 +100,7 @@ button:focus-visible {
 
 
 canvas {
-  width: 50px;
-  height: 50px;
+  image-rendering: pixelated;
 }
 
 .pixel {
@@ -111,6 +110,7 @@ canvas {
   width: 1px;
   height: 1px;
   animation: mooove 1s infinite;
+  animation-delay: var(--delay)
 }
 
 @keyframes mooove {

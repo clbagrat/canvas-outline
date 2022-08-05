@@ -11,5 +11,8 @@
   "devDependencies": {
     "typescript": "^4.6.4",
     "vite": "^3.0.0"
+  },
+  "dependencies": {
+    "@types/offscreencanvas": "^2019.7.0"
   }
 }
