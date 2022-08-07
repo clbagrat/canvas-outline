@@ -26,7 +26,7 @@ export const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string) => 
         amoutOfInts = data.length - prevAmoutOfInts;
       }
 
-      let w = new MyWorker(); 
+      let w = new MyWorker();
       let imageData = data.slice(prevAmoutOfInts, prevAmoutOfInts + amoutOfInts);
 
       w.postMessage({
@@ -40,11 +40,11 @@ export const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string) => 
         let imageData = new ImageData(data.clampedArray, width);
 
         ctx.putImageData(imageData, 0, i * segmentHeight);
-        if (i === maxWorkers - 1) {
-          document.body.prepend(
-            (performance.now() - start).toString()
-          );
-        }
+        // if (i === maxWorkers - 1) {
+        //   document.body.prepend(
+        //     (performance.now() - start).toString()
+        //   );
+        // }
       };
     }
   };
