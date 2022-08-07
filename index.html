@@ -1,14 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <div id="target"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>canvas-outline</title>
+</head>
+
+<body>
+  <div id="app">
+    <div id="overlay-open-image">
+      <label for="image-upload" class="button">
+        📁 Open
+      </label>
+      or
+      <input id="image-upload" class="button hidden" type="file" name="upload" accept=".png">
+      <button id="open-default-image" class="button">🖼️ use default image</button>
+    </div>
+    <div id="overlay-canvas" class="hidden">
+      <canvas></canvas>
+      <div>
+        <button id="back-to-home" class="button">🔙 Back to home screen</button>
+        <button id="save-image" class="button">💾 Save image</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
