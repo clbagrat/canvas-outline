@@ -1,6 +1,6 @@
 import MyWorker from './worker/worker.js?worker';
 
-export const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string, targetNode: HTMLDivElement) => {
+export const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string) => {
   const ctx = canvas.getContext('2d')!;
 
   const img = document.createElement('img');
