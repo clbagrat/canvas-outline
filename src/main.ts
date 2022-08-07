@@ -7,29 +7,24 @@ import complexBig from './32x32.png';
 import { canvasOutliner } from './canvasOutliner';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  Я ЗАГРУЗИЛСЯ.
   <canvas>
   </canvas>
+  <input type="file" name="upload" accept=".png">
 `
 
 const canvasNode = document.querySelector('canvas')!;
 
-////@ts-ignore
-//const offsreen = canvasNode.transferControlToOffscreen();
-//
-//new Array(1).fill('worker.js').forEach((name, i) => {
-//
-//  let w = new Worker(name);
-//
-//  w.postMessage({ i, canvas: offsreen }, [offsreen]);
-//  w.onmessage = () => {
-//    console.count();
-//  } 
-//});
-
-
 const target = document.querySelector<HTMLDivElement>("#target");
-if (target) {
-  canvasOutliner(canvasNode, memeSrc, target);
-}
+
+document.querySelector('input')!.addEventListener('change', (e: Event) => {
+  const target = e.target as HTMLInputElement;
+  if (!target?.files || target.files?.length === 0) return;
+  
+  const reader = new FileReader();
+  reader.readAsDataURL(target.files[0]);
+  reader.onload = (e: Event) => {
+    //@ts-ignore
+    canvasOutliner(canvasNode, e.target?.result, target);
+  };
+})
 

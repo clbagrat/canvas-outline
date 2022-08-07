@@ -1,4 +1,4 @@
-import MyWorker from './worker.js?worker';
+import MyWorker from './worker/worker.js?worker';
 
 export const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string, targetNode: HTMLDivElement) => {
   const ctx = canvas.getContext('2d')!;
@@ -6,20 +6,23 @@ export const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string, tar
   const img = document.createElement('img');
   img.src = targetSrc;
 
+  const maxWorkers = navigator.hardwareConcurrency;
+
   img.onload = () => {
     const { width, height } = img;
     canvas.width = width;
     canvas.height = height;
     ctx.drawImage(img, 0, 0, width, height);
+
     const { data } = ctx.getImageData(0, 0, width, height);
-    let segmentHeight = Math.floor(height / navigator.hardwareConcurrency);
+    let segmentHeight = Math.floor(height / maxWorkers);
 
-    console.time();
 
-    for (let i = 0; i < navigator.hardwareConcurrency; i += 1) {
+    let start = performance.now();
+    for (let i = 0; i < maxWorkers; i += 1) {
       let prevAmoutOfInts = (i * segmentHeight) * width * 4;
       let amoutOfInts = segmentHeight * width * 4;
-      if (i === navigator.hardwareConcurrency - 1) {
+      if (i === maxWorkers - 1) {
         amoutOfInts = data.length - prevAmoutOfInts;
       }
 
@@ -30,20 +33,19 @@ export const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string, tar
         index: i,
         imageData,
         width,
-        color: "tomato"
+        strokeWidth: 1
       });
 
       w.onmessage = ({ data }) => {
-        let arr = new Uint8ClampedArray();
         let imageData = new ImageData(data.clampedArray, width);
 
         ctx.putImageData(imageData, 0, i * segmentHeight);
-        if (i === navigator.hardwareConcurrency - 1) {
-          console.timeEnd();
+        if (i === maxWorkers - 1) {
+          document.body.prepend(
+            (performance.now() - start).toString()
+          );
         }
       };
     }
-
-
   };
 }
