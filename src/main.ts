@@ -1,14 +1,14 @@
 import { canvasOutliner } from './canvasOutliner';
 import './style.css';
 
-const overlayOpenFile = document.querySelector('#overlay-open-image')!;
-const overlayCanvas = document.querySelector('#overlay-canvas')!;
+const overlayOpenFile = document.querySelector('.overlay-open-image')!;
+const overlayCanvas = document.querySelector('.overlay-canvas')!;
 
 const canvasNode = document.querySelector('canvas')!;
-const imageUpload = document.querySelector('#image-upload')!;
-const defaultImage = document.querySelector('#open-default-image')!;
-const saveImage = document.querySelector('#save-image')!;
-const backToHome = document.querySelector('#back-to-home')!;
+const imageUpload = document.querySelector('.image-upload')!;
+const defaultImage = document.querySelector('.open-default-image')!;
+const saveImage = document.querySelector('.save-image')!;
+const backToHome = document.querySelector('.back-to-home')!;
 
 function toggleOverlay() {
   overlayOpenFile.classList.toggle('hidden');

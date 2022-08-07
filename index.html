@@ -9,19 +9,18 @@
 
 <body>
   <div id="app">
-    <div id="overlay-open-image">
-      <label for="image-upload" class="button">
-        📁 Open
+    <div class="overlay-open-image">
+      <label for="open-file" class="button">
+        Open image
       </label>
-      or
-      <input id="image-upload" class="button hidden" type="file" name="upload" accept=".png">
-      <button id="open-default-image" class="button">🖼️ use default image</button>
+      <input id="open-file" class="image-upload button hidden" type="file" name="upload" accept=".png">
+      <button class="open-default-image button">Use default image</button>
     </div>
-    <div id="overlay-canvas" class="hidden">
+    <div class="overlay-canvas hidden">
       <canvas></canvas>
       <div>
-        <button id="back-to-home" class="button">🔙 Back to home screen</button>
-        <button id="save-image" class="button">💾 Save image</button>
+        <button class="back-to-home button">Back to home screen</button>
+        <button class="save-image button">Save image</button>
       </div>
     </div>
   </div>

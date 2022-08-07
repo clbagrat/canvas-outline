@@ -35,7 +35,7 @@ canvas {
   image-rendering: pixelated;
 }
 
-#overlay-open-image, #overlay-canvas {
+.overlay-open-image, .overlay-canvas {
   height: inherit;
   background-color: #333;
   display: flex;
@@ -44,7 +44,7 @@ canvas {
   gap: 4px;
 }
 
-#overlay-canvas {
+.overlay-canvas {
   flex-direction: column;
 }
 
@@ -60,5 +60,5 @@ canvas {
 }
 
 .hidden {
-  display: none !important;
+  display: none;
 }
