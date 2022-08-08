@@ -17,7 +17,6 @@ function toggleOverlay() {
 
 class ImageReader {
   private reader: FileReader;
-  public fileName: string | undefined;
 
   constructor() {
     this.reader = new FileReader();
@@ -28,7 +27,6 @@ class ImageReader {
 
     this.reader.readAsDataURL(files[0]);
     this.reader.onload = (event) => {
-      this.fileName = files[0].name;
       const file = event.target?.result as string;
       canvasOutliner(canvasNode, file);
       toggleOverlay();
@@ -37,9 +35,7 @@ class ImageReader {
 
   save(): void {
     const link = document.createElement('a');
-    link.download = this.fileName ?
-      `${this.fileName}-outline` :
-      'canvas-outline.png';
+    link.download = `canvas-outline-${Date.now()}.png`;
     link.href = canvasNode.toDataURL();
     link.click();
     link.remove();
