@@ -1,6 +1,6 @@
 import MyWorker from './worker/worker.js?worker';
 
-export const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string) => {
+const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string) => {
   const ctx = canvas.getContext('2d')!;
 
   const img = document.createElement('img');
@@ -40,12 +40,13 @@ export const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string) => 
         let imageData = new ImageData(data.clampedArray, width);
 
         ctx.putImageData(imageData, 0, i * segmentHeight);
-        // if (i === maxWorkers - 1) {
-        //   document.body.prepend(
-        //     (performance.now() - start).toString()
-        //   );
-        // }
+        if (i === maxWorkers - 1) {
+          console.log(performance.now() - start);
+        }
       };
     }
   };
 }
+
+export { canvasOutliner }
+export default canvasOutliner
