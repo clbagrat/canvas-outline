@@ -1,4 +1,4 @@
-import MyWorker from './worker/worker.js?worker';
+import MyWorker from './worker/worker.js?worker&inline';
 
 const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string) => {
   const ctx = canvas.getContext('2d')!;
