@@ -22,43 +22,102 @@
 }
 
 body {
-  height: 100vh;
+  background-color: #000;
 }
 
 #app {
-  height: inherit;
-}
-
-canvas {
-  padding: 1rem;
-  height: calc(100% - 100px);
-  image-rendering: pixelated;
-}
-
-.overlay-open-image, .overlay-canvas {
-  height: inherit;
-  background-color: #333;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
 }
 
-.overlay-canvas {
-  flex-direction: column;
+.canvas-container {
+  width: 90vw;
+  height: 90vh;
+  overflow: hidden;
+  padding-bottom: 2rem;
 }
 
-.button {
-  outline: none;
-  background-color: #222;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 2px;
-  padding: 6px;
-  line-height: 1rem;
+canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .hidden {
   display: none;
+}
+
+.drag {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed #434343;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  padding: 1rem;
+}
+
+.drag:hover {
+  border: 1px dashed #165996;
+}
+
+.drag-skip {
+  color: #177ddc;
+  font-size: 12px;
+  text-decoration: underline;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: color 0.3s;
+}
+
+.drag-skip:hover {
+  color: #095cb5;
+}
+
+.drag-description {
+  color: #ffffff73;
+  font-size: 14px;
+}
+
+.button {
+  line-height: 1.5715;
+  position: relative;
+  display: inline-block;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  background-image: none;
+  border: 1px solid transparent;
+  box-shadow: 0 2px #00000004;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  touch-action: manipulation;
+  height: 32px;
+  padding: 4px 15px;
+  font-size: 14px;
+  border-radius: 2px;
+  color: #ffffffd9;
+  border-color: #434343;
+  background: transparent;
+}
+
+.button.primary {
+  color: #fff;
+  border-color: #095cb5;
+  background: #095cb5;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }

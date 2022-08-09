@@ -1,18 +1,23 @@
 import { canvasOutliner } from 'canvas-outline';
 import './style.css';
 
-const overlayOpenFile = document.querySelector('.overlay-open-image')!;
-const overlayCanvas = document.querySelector('.overlay-canvas')!;
+const dragContainer = document.querySelector('.drag-container')!;
+const dragInput = document.querySelector('#drag-input')!;
+const dragSkip = document.querySelector('.drag-skip')!;
 
+// dragContainer.addEventListener('drop', (event) => {
+//     event.preventDefault()
+//     console.log(event)
+// })
+
+const canvasContainer = document.querySelector('.canvas-outline')!;
 const canvasNode = document.querySelector('canvas')!;
-const imageUpload = document.querySelector('.image-upload')!;
-const defaultImage = document.querySelector('.open-default-image')!;
-const saveImage = document.querySelector('.save-image')!;
-const backToHome = document.querySelector('.back-to-home')!;
+const saveImageButton = document.querySelector('#save-image')!;
+const backHomeButton = document.querySelector('#back-home')!;
 
-function toggleOverlay() {
-  overlayOpenFile.classList.toggle('hidden');
-  overlayCanvas.classList.toggle('hidden');
+function toggleContainer() {
+  dragContainer.classList.toggle('hidden');
+  canvasContainer.classList.toggle('hidden');
 }
 
 class ImageReader {
@@ -29,7 +34,7 @@ class ImageReader {
     this.reader.onload = (event) => {
       const file = event.target?.result as string;
       canvasOutliner(canvasNode, file);
-      toggleOverlay();
+      toggleContainer();
     }
   }
 
@@ -44,19 +49,19 @@ class ImageReader {
 
 const imageReader = new ImageReader();
 
-imageUpload.addEventListener('change', (event) => {
+dragInput.addEventListener('change', (event) => {
   imageReader.open((event.target as HTMLInputElement).files);
 })
 
-defaultImage.addEventListener('click', () => {
-  canvasOutliner(canvasNode, './pikachu.png');
-  toggleOverlay();
-})
-
-saveImage.addEventListener('click', () => {
+saveImageButton.addEventListener('click', () => {
   imageReader.save();
 })
 
-backToHome.addEventListener('click', () => {
-  toggleOverlay();
+backHomeButton.addEventListener('click', () => {
+  toggleContainer();
+})
+
+dragSkip.addEventListener('click', () => {
+  canvasOutliner(canvasNode, './pikachu.png');
+  toggleContainer();
 })

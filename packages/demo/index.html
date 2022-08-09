@@ -9,18 +9,24 @@
 
 <body>
   <div id="app">
-    <div class="overlay-open-image">
-      <label for="open-file" class="button">
-        Open image
+    <div class="drag-container">
+      <label class="drag" for="drag-input">
+        <input id="drag-input" class="hidden" type="file" accept=".png">
+        <p class="drag-description">
+          Drag or click to upload image
+        </p>
       </label>
-      <input id="open-file" class="image-upload button hidden" type="file" name="upload" accept=".png">
-      <button class="open-default-image button">Use default image</button>
+      <p class="drag-skip">
+        Skip upload
+      </p>
     </div>
-    <div class="overlay-canvas hidden">
-      <canvas></canvas>
-      <div>
-        <button class="back-to-home button">Back to home screen</button>
-        <button class="save-image button">Save image</button>
+    <div class="canvas-outline hidden">
+      <div class="canvas-container">
+        <canvas></canvas>
+      </div>
+      <div class="flex-center">
+        <button id="save-image" class="button primary">Download Image</button>
+        <button id="back-home" class="button">Back</button>
       </div>
     </div>
   </div>
