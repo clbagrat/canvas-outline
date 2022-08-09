@@ -1,4 +1,4 @@
-import { canvasOutliner } from './canvasOutliner';
+import { canvasOutliner } from 'canvas-outline';
 import './style.css';
 
 const overlayOpenFile = document.querySelector('.overlay-open-image')!;
