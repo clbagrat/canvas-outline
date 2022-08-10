@@ -1,16 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
-    <script type="module" crossorigin src="./assets/index.3d056901.js"></script>
-    <link rel="stylesheet" href="./assets/index.55c0d77a.css">
-  </head>
-  <body>
-    <div id="app"></div>
-    <div id="target"></div>
-    
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>canvas-outline</title>
+  <script type="module" crossorigin src="./assets/index.df6dd8e0.js"></script>
+  <link rel="stylesheet" href="./assets/index.24162254.css">
+</head>
+
+<body>
+  <div id="app">
+    <div class="drag-container">
+      <label class="drag" for="drag-input">
+        <input id="drag-input" class="hidden" type="file" accept=".png">
+        <p class="drag-description">
+          Drag or click to upload image
+        </p>
+      </label>
+      <p class="drag-skip">
+        Skip upload
+      </p>
+    </div>
+    <div class="canvas-outline hidden">
+      <div class="canvas-container">
+        <canvas></canvas>
+      </div>
+      <div class="flex-center">
+        <button id="save-image" class="button primary">Download Image</button>
+        <button id="back-home" class="button">Back</button>
+      </div>
+    </div>
+  </div>
+  
+</body>
+
 </html>
