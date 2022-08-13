@@ -15,6 +15,12 @@ const canvasNode = document.querySelector('canvas')!;
 const saveImageButton = document.querySelector('#save-image')!;
 const backHomeButton = document.querySelector('#back-home')!;
 
+const strokeWidthInput: HTMLInputElement
+  = document.querySelector('#strokeWidth')!;
+
+const strokeColorInput: HTMLInputElement
+  = document.querySelector('#strokeColor')!;
+
 function toggleContainer() {
   dragContainer.classList.toggle('hidden');
   canvasContainer.classList.toggle('hidden');
@@ -33,7 +39,9 @@ class ImageReader {
     this.reader.readAsDataURL(files[0]);
     this.reader.onload = (event) => {
       const file = event.target?.result as string;
-      canvasOutliner(canvasNode, file);
+      const strokeWidth = +strokeWidthInput.value;
+      const strokeColor = strokeColorInput.value;
+      canvasOutliner(canvasNode, file, strokeWidth, strokeColor);
       toggleContainer();
     }
   }
@@ -62,6 +70,8 @@ backHomeButton.addEventListener('click', () => {
 })
 
 dragSkip.addEventListener('click', () => {
-  canvasOutliner(canvasNode, './pikachu.png');
+  const strokeWidth = +strokeWidthInput.value;
+  const strokeColor = strokeColorInput.value;
+  canvasOutliner(canvasNode, './pikachu.png', strokeWidth, strokeColor);
   toggleContainer();
 })

@@ -47,7 +47,25 @@ canvas {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
+}
+
+.drag-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.parameter {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.parameter label {
+  margin-right: 12px;
+  font-size: 14px;
 }
 
 .drag {
