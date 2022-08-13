@@ -1,6 +1,11 @@
 import MyWorker from './worker/worker.js?worker&inline';
 
-const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string) => {
+const canvasOutliner = (
+  canvas: HTMLCanvasElement,
+  targetSrc: string,
+  strokeWidth: number,
+  strokeColor: string
+) => {
   const ctx = canvas.getContext('2d')!;
 
   const img = document.createElement('img');
@@ -33,7 +38,8 @@ const canvasOutliner = (canvas: HTMLCanvasElement, targetSrc: string) => {
         index: i,
         imageData,
         width,
-        strokeWidth: 1
+        strokeWidth,
+        strokeColor
       });
 
       w.onmessage = ({ data }) => {
