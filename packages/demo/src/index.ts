@@ -58,7 +58,12 @@ class ImageReader {
 const imageReader = new ImageReader();
 
 dragInput.addEventListener('change', (event) => {
-  imageReader.open((event.target as HTMLInputElement).files);
+    if (event.target && event.target.constructor.name == 'HTMLInputElement'){
+      imageReader.open((event.target as HTMLInputElement).files);
+      event.target.value = "";
+      event.preventDefault();
+      return false;
+    }
 })
 
 saveImageButton.addEventListener('click', () => {
