@@ -2,7 +2,7 @@ import { canvasOutliner } from 'canvas-outline';
 import './style.css';
 
 const dragContainer = document.querySelector('.drag-container')!;
-const dragInput = document.querySelector('#drag-input')!;
+const dragInput: HTMLInputElement = document.querySelector('#drag-input')!;
 const dragSkip = document.querySelector('.drag-skip')!;
 
 // dragContainer.addEventListener('drop', (event) => {
@@ -59,6 +59,10 @@ const imageReader = new ImageReader();
 
 dragInput.addEventListener('change', (event) => {
   imageReader.open((event.target as HTMLInputElement).files);
+})
+
+dragInput.addEventListener('click', () => {
+  dragInput.value = '';
 })
 
 saveImageButton.addEventListener('click', () => {
