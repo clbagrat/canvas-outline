@@ -5,21 +5,14 @@ const dragContainer = document.querySelector('.drag-container')!;
 const dragInput = document.querySelector('#drag-input')!;
 const dragSkip = document.querySelector('.drag-skip')!;
 
-// dragContainer.addEventListener('drop', (event) => {
-//     event.preventDefault()
-//     console.log(event)
-// })
-
 const canvasContainer = document.querySelector('.canvas-outline')!;
 const canvasNode = document.querySelector('canvas')!;
 const saveImageButton = document.querySelector('#save-image')!;
 const backHomeButton = document.querySelector('#back-home')!;
 
-const strokeWidthInput: HTMLInputElement
-  = document.querySelector('#strokeWidth')!;
+const strokeWidthInput: HTMLInputElement = document.querySelector('#strokeWidth')!;
 
-const strokeColorInput: HTMLInputElement
-  = document.querySelector('#strokeColor')!;
+const strokeColorInput: HTMLInputElement = document.querySelector('#strokeColor')!;
 
 function toggleContainer() {
   dragContainer.classList.toggle('hidden');
@@ -43,7 +36,7 @@ class ImageReader {
       const strokeColor = strokeColorInput.value;
       canvasOutliner(canvasNode, file, strokeWidth, strokeColor);
       toggleContainer();
-    }
+    };
   }
 
   save(): void {
@@ -58,25 +51,39 @@ class ImageReader {
 const imageReader = new ImageReader();
 
 dragInput.addEventListener('change', (event) => {
-    if (event.target && event.target.constructor.name == 'HTMLInputElement'){
-      imageReader.open((event.target as HTMLInputElement).files);
-      event.target.value = "";
-      event.preventDefault();
-      return false;
-    }
-})
+  if (event.target && event.target.constructor.name == 'HTMLInputElement') {
+    imageReader.open((event.target as HTMLInputElement).files);
+    (event.target as HTMLInputElement).value = '';
+    event.preventDefault();
+    return false;
+  }
+});
 
 saveImageButton.addEventListener('click', () => {
   imageReader.save();
-})
+});
 
 backHomeButton.addEventListener('click', () => {
   toggleContainer();
-})
+});
 
 dragSkip.addEventListener('click', () => {
   const strokeWidth = +strokeWidthInput.value;
   const strokeColor = strokeColorInput.value;
   canvasOutliner(canvasNode, './pikachu.png', strokeWidth, strokeColor);
   toggleContainer();
-})
+});
+
+dragContainer.addEventListener('drop', (event) => {
+  event.preventDefault();
+  const dt = (event as DragEvent).dataTransfer;
+  const files = dt?.files;
+
+  if (dt && files) {
+    imageReader.open(files);
+  }
+});
+
+dragContainer.addEventListener('dragover', (event) => {
+  event.preventDefault();
+});
