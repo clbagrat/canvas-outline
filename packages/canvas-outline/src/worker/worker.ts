@@ -13,6 +13,8 @@ function convertColor(hex: string): {
 onmessage = ({ data }) => {
   const {
     imageData,
+    overlapTopData,
+    overlapBottomData,
     width,
     strokeWidth,
     strokeColor
@@ -21,9 +23,12 @@ onmessage = ({ data }) => {
   const rgb = convertColor(strokeColor);
 
   let clampedArray = new Uint8ClampedArray(Array.from(imageData));
-  console.log({imageData, clampedArray});
+  const d = Array.from(imageData) as number[];
+  const overlapTop = Array.from(overlapTopData) as number[];
+  const overlapBot = Array.from(overlapBottomData) as number[];
+  
 
-  for (let {index} of canvasIterator(imageData, width, strokeWidth)) {
+  for (let {index} of canvasIterator(d, overlapTop, overlapBot, width, strokeWidth)) {
     clampedArray[index] = rgb.r;
     clampedArray[index + 1] = rgb.g;
     clampedArray[index + 2] = rgb.b;
