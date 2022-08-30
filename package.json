@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "pnpm --parallel --filter='./packages/*' -r dev",
+    "dev": "pnpm --parallel dev",
     "build": "pnpm --filter='./packages/*' -r build"
   },
   "devDependencies": {

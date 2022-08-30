@@ -17,10 +17,14 @@
     }
   },
   "scripts": {
-    "dev": "vite build --watch",
+    "dev:mild": "vite build --watch",
+    "dev": "pnpm build & chokidar \"src/*.ts\" \"src/*/**.ts\" -c \"pnpm build\"",
     "build": "vite build"
   },
   "devDependencies": {
     "@types/offscreencanvas": "^2019.7.0"
+  },
+  "dependencies": {
+    "chokidar-cli": "^3.0.0"
   }
 }

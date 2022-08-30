@@ -32,11 +32,21 @@ const canvasOutliner = (
       }
 
       let w = new MyWorker();
-      let imageData = data.slice(prevAmoutOfInts, prevAmoutOfInts + amoutOfInts);
+      const nextAmountOfInts = prevAmoutOfInts + amoutOfInts
+      let imageData = data.slice(prevAmoutOfInts, nextAmountOfInts);
+      let overlapTopData = data.slice(prevAmoutOfInts - strokeWidth * width * 4, prevAmoutOfInts);
+      let overlapBottomData = data.slice(
+        nextAmountOfInts,
+        nextAmountOfInts + strokeWidth * width * 4
+      );
+
+      console.log({overlapTopData}, prevAmoutOfInts)
 
       w.postMessage({
         index: i,
         imageData,
+        overlapTopData,
+        overlapBottomData,
         width,
         strokeWidth,
         strokeColor
