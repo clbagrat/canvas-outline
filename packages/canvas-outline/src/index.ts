@@ -59,6 +59,7 @@ const canvasOutliner = (
         if (i === maxWorkers - 1) {
           console.log(performance.now() - start);
         }
+        w.terminate();
       };
     }
   };
