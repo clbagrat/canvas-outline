@@ -18,6 +18,8 @@ const strokeColorInput: HTMLInputElement = document.querySelector('#strokeColor'
 const strokeColorInputInteractive: HTMLInputElement = document.querySelector('#strokeColorInteractive')!;
 strokeColorInputInteractive.value = strokeColorInput.value;
 
+let filePath: string = './pikachu.png';
+
 function toggleContainer() {
   dragContainer.classList.toggle('hidden');
   canvasContainer.classList.toggle('hidden');
@@ -36,6 +38,7 @@ class ImageReader {
     this.reader.readAsDataURL(files[0]);
     this.reader.onload = (event) => {
       const file = event.target?.result as string;
+      filePath = file;
       const strokeWidth = +strokeWidthInput.value;
       const strokeColor = strokeColorInput.value;
       canvasOutliner(canvasNode, file, strokeWidth, strokeColor);
@@ -74,7 +77,7 @@ backHomeButton.addEventListener('click', () => {
 dragSkip.addEventListener('click', () => {
   const strokeWidth = +strokeWidthInput.value;
   const strokeColor = strokeColorInput.value;
-  canvasOutliner(canvasNode, './pikachu.png', strokeWidth, strokeColor);
+  canvasOutliner(canvasNode, filePath, strokeWidth, strokeColor);
   toggleContainer();
 });
 
@@ -93,17 +96,13 @@ dragContainer.addEventListener('dragover', (event) => {
 });
 
 strokeWidthInputInteractive.addEventListener('change', () => {
-  if (strokeWidthInputInteractive) {
-    const context = canvasNode.getContext('2d');
-    context?.clearRect(0, 0, canvasNode.width, canvasNode.height);
-    canvasOutliner(canvasNode, './pikachu.png', +strokeWidthInputInteractive.value, strokeColorInputInteractive.value);
-  }
+  const context = canvasNode.getContext('2d');
+  context?.clearRect(0, 0, canvasNode.width, canvasNode.height);
+  canvasOutliner(canvasNode, filePath, +strokeWidthInputInteractive.value, strokeColorInputInteractive.value);
 });
 
 strokeColorInputInteractive.addEventListener('change', () => {
-  if (strokeWidthInputInteractive) {
-    const context = canvasNode.getContext('2d');
-    context?.clearRect(0, 0, canvasNode.width, canvasNode.height);
-    canvasOutliner(canvasNode, './pikachu.png', +strokeWidthInputInteractive.value, strokeColorInputInteractive.value);
-  }
+  const context = canvasNode.getContext('2d');
+  context?.clearRect(0, 0, canvasNode.width, canvasNode.height);
+  canvasOutliner(canvasNode, filePath, +strokeWidthInputInteractive.value, strokeColorInputInteractive.value);
 });
