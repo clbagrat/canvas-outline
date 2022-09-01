@@ -11,8 +11,12 @@ const saveImageButton = document.querySelector('#save-image')!;
 const backHomeButton = document.querySelector('#back-home')!;
 
 const strokeWidthInput: HTMLInputElement = document.querySelector('#strokeWidth')!;
+const strokeWidthInputInteractive: HTMLInputElement = document.querySelector('#strokeWidthInteractive')!;
+strokeWidthInputInteractive.value = strokeWidthInput.value;
 
 const strokeColorInput: HTMLInputElement = document.querySelector('#strokeColor')!;
+const strokeColorInputInteractive: HTMLInputElement = document.querySelector('#strokeColorInteractive')!;
+strokeColorInputInteractive.value = strokeColorInput.value;
 
 function toggleContainer() {
   dragContainer.classList.toggle('hidden');
@@ -86,4 +90,20 @@ dragContainer.addEventListener('drop', (event) => {
 
 dragContainer.addEventListener('dragover', (event) => {
   event.preventDefault();
+});
+
+strokeWidthInputInteractive.addEventListener('change', () => {
+  if (strokeWidthInputInteractive) {
+    const context = canvasNode.getContext('2d');
+    context?.clearRect(0, 0, canvasNode.width, canvasNode.height);
+    canvasOutliner(canvasNode, './pikachu.png', +strokeWidthInputInteractive.value, strokeColorInputInteractive.value);
+  }
+});
+
+strokeColorInputInteractive.addEventListener('change', () => {
+  if (strokeWidthInputInteractive) {
+    const context = canvasNode.getContext('2d');
+    context?.clearRect(0, 0, canvasNode.width, canvasNode.height);
+    canvasOutliner(canvasNode, './pikachu.png', +strokeWidthInputInteractive.value, strokeColorInputInteractive.value);
+  }
 });
