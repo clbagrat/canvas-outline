@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>canvas-outline</title>
-  <script type="module" crossorigin src="./assets/index.8984511c.js"></script>
+  <script type="module" crossorigin src="./assets/index.97591969.js"></script>
   <link rel="stylesheet" href="./assets/index.f37f1215.css">
 </head>
 
@@ -35,6 +35,14 @@
         <canvas></canvas>
       </div>
       <div class="flex-center">
+        <div class="parameter">
+          <label for="strokeColorInteractive">Color</label>
+          <input type="color" id="strokeColorInteractive" value="#ffffff">
+        </div>
+        <div class="parameter">
+          <label for="strokeWidthInteractive">Width</label>
+          <input type="range" id="strokeWidthInteractive" value="1" min="1" max="10">
+        </div>
         <button id="save-image" class="button primary">Download Image</button>
         <button id="back-home" class="button">Back</button>
       </div>
