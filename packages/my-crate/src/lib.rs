@@ -10,12 +10,12 @@ extern "C" {
 // 2d array with special abilities
 struct PrefixSum2D {
     data: Vec<i32>,
-    width: i32,
-    height: i32,
+    width: usize,
+    height: usize,
 }
 
 impl PrefixSum2D {
-    fn new(width: i32, height: i32) -> Self {
+    fn new(width: usize, height: usize) -> Self {
         let mut data = Vec::new();
         data.reserve((width * height) as usize);
         for _ in 0..width*height {
@@ -25,15 +25,15 @@ impl PrefixSum2D {
     }
 
     // add val to [0..y, 0..x] subarray
-    fn add(&mut self, i: i32, j: i32, val: i32) {
+    fn add(&mut self, i: usize, j: usize, val: i32) {
         if i >= self.height || j >= self.width {
             return
         }
         self.add_unsafe(i.min(self.height-1), j.min(self.width-1), val);
     }
 
-    fn add_unsafe(&mut self, i: i32, j: i32, val: i32) {
-        self.data[(i * self.width + j) as usize] += val;
+    fn add_unsafe(&mut self, i: usize, j: usize, val: i32) {
+        self.data[i * self.width + j] += val;
     }
 
     fn fill_prefix_sums(&mut self) {
@@ -50,13 +50,13 @@ impl PrefixSum2D {
         }
     }
 
-    fn get(&self, i: i32, j: i32) -> i32 {
-        self.data[(i * self.width + j) as usize]
+    fn get(&self, i: usize, j: usize) -> i32 {
+        self.data[i * self.width + j]
     }
 }
 
 #[wasm_bindgen]
-pub fn outline(data: Uint8ClampedArray, width: i32, height: i32, stroke_width: i32, r: u8, g: u8, b: u8) {
+pub fn outline(data: Uint8ClampedArray, width: usize, height: usize, stroke_width: usize, r: u8, g: u8, b: u8) {
     let mut pref = PrefixSum2D::new(width, height);
     for i in 0..height {
         for j in 0..width {
@@ -64,8 +64,8 @@ pub fn outline(data: Uint8ClampedArray, width: i32, height: i32, stroke_width: i
             if data.get_index(k + 3) < 255 {
                 continue;
             }
-            let top = 0.max(i-stroke_width);
-            let left = 0.max(j-stroke_width);
+            let top = if i>stroke_width {i-stroke_width} else {0};
+            let left = if j>stroke_width {j-stroke_width} else {0};
             let bottom = i+stroke_width+1;
             let right = j+stroke_width+1;
             pref.add_unsafe(top, left,  1);
