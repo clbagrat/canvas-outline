@@ -7,14 +7,6 @@ extern "C" {
     fn log(s: &str);
 }
 
-fn set_pixel(data: &mut Uint8ClampedArray, width: i32, _height: i32, r: u8, g: u8, b: u8, i: i32, j: i32) {
-    let k = ((i * width + j) * 4) as u32;
-    data.fill(r, k, k + 1);
-    data.fill(g, k + 1, k + 2);
-    data.fill(b, k + 2, k + 3);
-    data.fill(255, k + 3, k + 4);
-}
-
 struct Fenwick2DTree {
     data: Vec<i32>,
     width: i32,
@@ -61,7 +53,7 @@ impl Fenwick2DTree {
 }
 
 #[wasm_bindgen]
-pub fn outline(mut data: Uint8ClampedArray, width: i32, height: i32, stroke_width: i32, r: u8, g: u8, b: u8) {
+pub fn outline(data: Uint8ClampedArray, width: i32, height: i32, stroke_width: i32, r: u8, g: u8, b: u8) {
     let mut ft = Fenwick2DTree::new(width, height);
     for i in 0..height {
         for j in 0..width {
@@ -69,23 +61,26 @@ pub fn outline(mut data: Uint8ClampedArray, width: i32, height: i32, stroke_widt
             if data.get_index(k + 3) < 255 {
                 continue;
             }
-            let i0 = 0.max(i - stroke_width);
-            let i1 = height.min(i + stroke_width + 1);
-            let j0 = 0.max(j - stroke_width);
-            let j1 = width.min(j + stroke_width + 1);
-            ft.add(i0, j0,  1);
-            ft.add(i0, j1, -1);
-            ft.add(i1, j0, -1);
-            ft.add(i1, j1,  1);
+            let top = 0.max(i - stroke_width);
+            let bottom = height.min(i + stroke_width + 1);
+            let left = 0.max(j - stroke_width);
+            let right = width.min(j + stroke_width + 1);
+            ft.add(top, left,  1);
+            ft.add(top, right, -1);
+            ft.add(bottom, left, -1);
+            ft.add(bottom, right,  1);
         }
     }
     for i in 0..height {
         for j in 0..width {
-            let k = (i * width + j) as u32;
-            if data.get_index(k * 4 + 3) == 255 || ft.get(i, j) == 0 {
+            let k = ((i * width + j) * 4) as u32;
+            if data.get_index(k + 3) == 255 || ft.get(i, j) == 0 {
                 continue;
             }
-            set_pixel(&mut data, width, height, r, g, b, i, j);
+            data.set_index(k, r);
+            data.set_index(k+1, g);
+            data.set_index(k+2, b);
+            data.set_index(k+3, 255);
         }
     }
 }
