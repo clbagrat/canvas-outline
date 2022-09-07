@@ -1,13 +1,6 @@
-use wasm_bindgen::prelude::*;
+use wasm_bindgen::prelude::{wasm_bindgen};
 use js_sys::Uint8ClampedArray;
 
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
-}
-
-// 2d array with special abilities
 struct PrefixSum2D {
     data: Vec<i32>,
     width: usize,
