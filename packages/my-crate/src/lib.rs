@@ -9,30 +9,33 @@ struct PrefixSum2D {
 
 impl PrefixSum2D {
     fn new(width: usize, height: usize) -> Self {
-        let data = vec![0; width*height];
-        return PrefixSum2D {data, width, height}
+        return PrefixSum2D {
+            data: vec![0; width*height],
+            width,
+            height,
+        }
     }
 
-    fn add_unsafe(&mut self, i: usize, j: usize, val: i32) {
+    fn add(&mut self, i: usize, j: usize, val: i32) {
         self.data[i * self.width + j] += val;
-    }
-
-    fn fill_prefix_sums(&mut self) {
-        for i in 1..self.height {
-            self.add_unsafe(i, 0, self.get(i-1, 0));
-        }
-        for j in 1..self.width {
-            self.add_unsafe(0, j, self.get(0, j-1));
-        }
-        for i in 1..self.height {
-            for j in 1..self.width {
-                self.add_unsafe(i, j, self.get(i-1, j) + self.get(i, j-1) - self.get(i-1, j-1))
-            }
-        }
     }
 
     fn get(&self, i: usize, j: usize) -> i32 {
         self.data[i * self.width + j]
+    }
+
+    fn fill_prefix_sums(&mut self) {
+        for i in 1..self.height {
+            self.add(i, 0, self.get(i-1, 0));
+        }
+        for j in 1..self.width {
+            self.add(0, j, self.get(0, j-1));
+        }
+        for i in 1..self.height {
+            for j in 1..self.width {
+                self.add(i, j, self.get(i-1, j) + self.get(i, j-1) - self.get(i-1, j-1))
+            }
+        }
     }
 }
 
@@ -53,16 +56,28 @@ pub fn outline(data: Uint8ClampedArray, width: usize, height: usize, stroke_widt
             let left = if j>stroke_width {j-stroke_width} else {0};
             let bottom = i+stroke_width+1;
             let right = j+stroke_width+1;
-            vec![
-                (top, left, 1),
-                (top, right, -1),
-                (bottom, left, -1),
-                (bottom, right, 1),
-            ]
+            match (bottom < height, right < width) {
+            (true, true) => vec![
+                    (top, left, 1),
+                    (top, right, -1),
+                    (bottom, left, -1),
+                    (bottom, right, 1),
+                ],
+            (false, true) => vec![
+                    (top, left, 1),
+                    (top, right, -1),
+                ],
+            (true, false) => vec![
+                    (top, left, 1),
+                    (bottom, left, -1),
+                ],
+            (false, false) => vec![
+                    (top, left, 1),
+                ],
+            }
         })
-        .filter(|(i, j, _)| *i < height && *j < width)
         .for_each(|(i, j, val)| {
-            pref.add_unsafe(i, j, val);
+            pref.add(i, j, val);
         });
     pref.fill_prefix_sums();
     (0..height)
