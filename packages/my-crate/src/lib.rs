@@ -54,22 +54,28 @@ impl PrefixSum2D {
 #[wasm_bindgen]
 pub fn outline(data: Uint8ClampedArray, width: usize, height: usize, stroke_width: usize, r: u8, g: u8, b: u8) {
     let mut pref = PrefixSum2D::new(width, height);
-    for i in 0..height {
-        for j in 0..width {
+    (0..height)
+        .into_iter()
+        .flat_map(|i| (0..width)
+            .into_iter()
+            .map(move |j| (i, j)))
+        .filter(|(i, j)| {
             let k = ((i * width + j) * 4) as u32;
-            if data.get_index(k + 3) < 255 {
-                continue;
-            }
+            return data.get_index(k + 3) == 255
+        })
+        .map(|(i, j)| {
             let top = if i>stroke_width {i-stroke_width} else {0};
             let left = if j>stroke_width {j-stroke_width} else {0};
             let bottom = i+stroke_width+1;
             let right = j+stroke_width+1;
+            (top, left, bottom, right)
+        })
+        .for_each(|(top, left, bottom, right)| {
             pref.add_unsafe(top, left,  1);
             pref.add(top, right, -1);
             pref.add(bottom, left, -1);
             pref.add(bottom, right, 1);
-        }
-    }
+        });
     pref.fill_prefix_sums();
     for i in 0..height {
         for j in 0..width {
