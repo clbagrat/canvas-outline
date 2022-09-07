@@ -25,6 +25,14 @@ function toggleContainer() {
   canvasContainer.classList.toggle('hidden');
 }
 
+function parseHEXColor(color: string): {r: number, g: number, b: number} {
+  return {
+    r: +('0x' + color[1] + color[2]),
+    g: +('0x' + color[3] + color[4]),
+    b: +('0x' + color[5] + color[6]),
+  }
+}
+
 class ImageReader {
   private reader: FileReader;
 
@@ -40,7 +48,7 @@ class ImageReader {
       const file = event.target?.result as string;
       filePath = file;
       const strokeWidth = +strokeWidthInput.value;
-      const strokeColor = strokeColorInput.value;
+      const strokeColor = parseHEXColor(strokeColorInput.value);
       canvasOutliner(canvasNode, file, strokeWidth, strokeColor);
       toggleContainer();
     };
@@ -64,6 +72,7 @@ dragInput.addEventListener('change', (event) => {
     event.preventDefault();
     return false;
   }
+  return null;
 });
 
 saveImageButton.addEventListener('click', () => {
@@ -76,7 +85,8 @@ backHomeButton.addEventListener('click', () => {
 
 dragSkip.addEventListener('click', () => {
   const strokeWidth = +strokeWidthInput.value;
-  const strokeColor = strokeColorInput.value;
+  console.log(strokeColorInput);
+  const strokeColor = parseHEXColor(strokeColorInput.value);
   canvasOutliner(canvasNode, filePath, strokeWidth, strokeColor);
   toggleContainer();
 });
@@ -95,14 +105,12 @@ dragContainer.addEventListener('dragover', (event) => {
   event.preventDefault();
 });
 
-strokeWidthInputInteractive.addEventListener('change', () => {
+function handler() {
   const context = canvasNode.getContext('2d');
   context?.clearRect(0, 0, canvasNode.width, canvasNode.height);
-  canvasOutliner(canvasNode, filePath, +strokeWidthInputInteractive.value, strokeColorInputInteractive.value);
-});
+  const strokeColor = parseHEXColor(strokeColorInputInteractive.value);
+  canvasOutliner(canvasNode, filePath, +strokeWidthInputInteractive.value, strokeColor);
+}
 
-strokeColorInputInteractive.addEventListener('change', () => {
-  const context = canvasNode.getContext('2d');
-  context?.clearRect(0, 0, canvasNode.width, canvasNode.height);
-  canvasOutliner(canvasNode, filePath, +strokeWidthInputInteractive.value, strokeColorInputInteractive.value);
-});
+strokeWidthInputInteractive.addEventListener('change', handler);
+strokeColorInputInteractive.addEventListener('change', handler);
