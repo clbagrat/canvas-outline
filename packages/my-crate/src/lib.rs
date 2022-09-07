@@ -16,11 +16,7 @@ struct PrefixSum2D {
 
 impl PrefixSum2D {
     fn new(width: usize, height: usize) -> Self {
-        let mut data = Vec::new();
-        data.reserve((width * height) as usize);
-        for _ in 0..width*height {
-            data.push(0);
-        }
+        let data = vec![0; width*height];
         return PrefixSum2D {data, width, height}
     }
 
