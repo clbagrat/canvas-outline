@@ -1,4 +1,4 @@
-import init, {greet} from "../../my-crate/pkg/my_crate.js";
+import init, {outline} from "../../my-crate/pkg/my_crate.js";
 init();
 const canvasOutliner = (
   canvas: HTMLCanvasElement,
@@ -16,7 +16,7 @@ const canvasOutliner = (
     ctx.drawImage(img, 0, 0, width, height);
     const {data: data} = ctx.getImageData(0, 0, width, height);
     let start = performance.now();
-    greet(
+    outline(
       data,
       width, height,
       strokeWidth,

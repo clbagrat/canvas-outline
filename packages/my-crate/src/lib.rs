@@ -16,7 +16,7 @@ fn set_pixel(data: &mut Uint8ClampedArray, width: i32, _height: i32, r: u8, g: u
 }
 
 #[wasm_bindgen]
-pub fn greet(mut data: Uint8ClampedArray, width: i32, height: i32, stroke_width: i32, r: u8, g: u8, b: u8) {
+pub fn outline(mut data: Uint8ClampedArray, width: i32, height: i32, stroke_width: i32, r: u8, g: u8, b: u8) {
     let mut stroke = Vec::new();
     stroke.reserve((data.byte_length() / 4) as usize);
     for _ in 0..data.byte_length()/4 {
