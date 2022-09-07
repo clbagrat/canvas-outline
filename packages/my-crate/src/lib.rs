@@ -68,7 +68,7 @@ pub fn outline(data: Uint8ClampedArray, width: i32, height: i32, stroke_width: i
             let left = 0.max(j-stroke_width);
             let bottom = i+stroke_width+1;
             let right = j+stroke_width+1;
-            pref.add(top, left,  1);
+            pref.add_unsafe(top, left,  1);
             pref.add(top, right, -1);
             pref.add(bottom, left, -1);
             pref.add(bottom, right, 1);
