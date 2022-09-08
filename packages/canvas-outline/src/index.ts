@@ -31,10 +31,18 @@ function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidt
       void paint(void) {
         for (int i = -width; i <= width; i++) {
           for (int j = -width; j <= width; j++) {
-            if (distance(vec2(float(i), float(j)), vec2(0, 0)) > float(width)) {
+            highp float fi = float(i);
+            highp float fj = float(j);
+            if (distance(vec2(fi, fj), vec2(0, 0)) > float(width)) {
               continue;
             }
-            if (texture2D(uSampler, vTextureCoord + vec2(float(i), float(j))/vec2(${image.width}, ${image.height})).w > 0.5) {
+            highp float fi1 = fi / ${image.width}.0;
+            highp float fj1 = fj / ${image.height}.0;
+            highp vec2 cp = vTextureCoord + vec2(fi1, fj1);
+            if (cp.x < 0.0 || cp.y < 0.0 || cp.x >= 1.0 || cp.y >= 1.0) {
+              continue;
+            }
+            if (texture2D(uSampler, cp).w > 0.0) {
               gl_FragColor = vec4(${r}, ${g}, ${b}, 1.0);
               return;
             }
@@ -43,10 +51,11 @@ function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidt
       }
       void main(void) {
         highp vec4 tex = texture2D(uSampler, vTextureCoord);
-        if (tex.w > 0.5) {
+        if (tex.w > 0.0) {
           gl_FragColor = tex;
           return;
         }
+        // transparency sidehack
         gl_FragColor = vec4(vec3(1,1,1) - tex.xyz, 1.0);
         paint();
       }`;
