@@ -85,7 +85,6 @@ backHomeButton.addEventListener('click', () => {
 
 dragSkip.addEventListener('click', () => {
   const strokeWidth = +strokeWidthInput.value;
-  console.log(strokeColorInput);
   const strokeColor = parseHEXColor(strokeColorInput.value);
   canvasOutliner(canvasNode, filePath, strokeWidth, strokeColor);
   toggleContainer();
