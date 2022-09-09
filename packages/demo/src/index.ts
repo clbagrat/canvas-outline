@@ -1,4 +1,4 @@
-import { canvasPureJSOutliner, canvasShaderOutliner } from 'canvas-outline';
+import { canvasJSOutliner, canvasShaderOutliner } from 'canvas-outline';
 import './style.css';
 
 const dragContainer = document.querySelector('.drag-container')!;
@@ -27,22 +27,32 @@ function toggleContainer() {
   canvasContainer.classList.toggle('hidden');
 }
 
+const canvasStore: Record<string, HTMLCanvasElement> = {
+  'js': canvasNode
+};
+
 function reinitCanvas() {
   const parent = canvasNode.parentElement;
   parent?.removeChild(canvasNode);
-  canvasNode = document.createElement('canvas');
+
+  let canvasElem = null;
+  if (canvasStore[strokeBackendInput.value] !== undefined) {
+    canvasElem = canvasStore[strokeBackendInput.value];
+  } else {
+    canvasElem = document.createElement('canvas');
+    canvasStore[strokeBackendInput.value] = canvasElem;
+  }
+  canvasNode = canvasElem;
   parent?.appendChild(canvasNode);
 }
 
-let activeBackend = canvasPureJSOutliner;
+let activeBackend = canvasJSOutliner;
 function getOutlineFunction() {
-  let backend = canvasPureJSOutliner;
+  let backend = canvasJSOutliner;
   if (strokeBackendInput.value == 'webgl') {
     backend = canvasShaderOutliner;
-  } else if (strokeBackendInput.value == 'wasm') {
-
   } else {
-    backend = canvasPureJSOutliner;
+    backend = canvasJSOutliner;
   }
 
   if (backend != activeBackend) {
@@ -50,14 +60,6 @@ function getOutlineFunction() {
     activeBackend = backend;
   }
   return activeBackend;
-}
-
-function parseHEXColor(color: string): {r: number, g: number, b: number} {
-  return {
-    r: +('0x' + color[1] + color[2]),
-    g: +('0x' + color[3] + color[4]),
-    b: +('0x' + color[5] + color[6]),
-  }
 }
 
 class ImageReader {
@@ -75,8 +77,7 @@ class ImageReader {
       const file = event.target?.result as string;
       filePath = file;
       const strokeWidth = +strokeWidthInput.value;
-      const strokeColor = parseHEXColor(strokeColorInput.value);
-      getOutlineFunction()(canvasNode, file, strokeWidth, strokeColor);
+      getOutlineFunction()(canvasNode, file, strokeWidth, strokeColorInput.value);
       toggleContainer();
     };
   }
@@ -111,11 +112,8 @@ backHomeButton.addEventListener('click', () => {
 });
 
 dragSkip.addEventListener('click', () => {
-  //reinitCanvas();
-
   const strokeWidth = +strokeWidthInput.value;
-  const strokeColor = parseHEXColor(strokeColorInput.value);
-  getOutlineFunction()(canvasNode, filePath, strokeWidth, strokeColor);
+  getOutlineFunction()(canvasNode, filePath, strokeWidth, strokeColorInput.value);
   toggleContainer();
 });
 
@@ -134,9 +132,7 @@ dragContainer.addEventListener('dragover', (event) => {
 });
 
 function handler() {
-  const strokeColor = parseHEXColor(strokeColorInputInteractive.value);
-
-  getOutlineFunction()(canvasNode, filePath, +strokeWidthInputInteractive.value, strokeColor);
+  getOutlineFunction()(canvasNode, filePath, +strokeWidthInputInteractive.value, strokeColorInputInteractive.value);
 }
 
 strokeWidthInputInteractive.addEventListener('change', handler);
