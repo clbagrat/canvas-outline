@@ -28,13 +28,11 @@ function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidt
       uniform highp vec4 strokeColor;
       uniform highp vec2 imageSize;
       
-      bool haveNeighborPixel(highp float fx, highp float fy) {
-        if (distance(vec2(fx, fy), vec2(0, 0)) > width) {
+      bool haveNeighborPixel(highp vec2 f) {
+        if (length(f) > width) {
           return false;
         }
-        highp float fi1 = fx / imageSize.x;
-        highp float fj1 = fy / imageSize.y;
-        highp vec2 cp = vTextureCoord + vec2(fi1, fj1);
+        highp vec2 cp = vTextureCoord + f / imageSize;
         if (cp.x < 0.0 || cp.y < 0.0 || cp.x >= 1.0 || cp.y >= 1.0) {
           return false;
         }
@@ -46,24 +44,23 @@ function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidt
 
       mediump vec4 paint(void) {
         highp float fx = -width;
-        for (int i = 1; i != 2; i += 2) {
-
+        for (int i = 0; i != 1; i += 0) {
           highp float fy = -width;
-          for (int j = 1; j != 2; j += 2) {
-
-            bool shouldBeOutlined = haveNeighborPixel(fx, fy);
-            if (shouldBeOutlined) {
+          for (int j = 0; j != 1; j += 0) {
+            if (haveNeighborPixel(vec2(fx, fy))) {
               return strokeColor;
             }
 
             fy += 1.0;
-            if (fy > width)
+            if (fy > width) {
               break;
+            }
           }
 
           fx += 1.0;
-          if (fx > width)
+          if (fx > width) {
             break;
+          }
         }
 
         return vec4(0.0, 0.0, 0.0, 0.0);
