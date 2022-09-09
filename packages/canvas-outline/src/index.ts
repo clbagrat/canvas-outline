@@ -101,11 +101,19 @@ function initOutliner(canvas: HTMLCanvasElement): (targetSrc: string, strokeWidt
 
   const textureCoordBuffer = gl.createBuffer()!;
   gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]), gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    0.0, 0.0,
+    1.0, 0.0,
+    1.0, 1.0,
+    0.0, 1.0,
+  ]), gl.STATIC_DRAW);
 
   const indexBuffer = gl.createBuffer()!;
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([0, 1, 2, 0, 2, 3]), gl.STATIC_DRAW);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([
+    0, 1, 2,
+    0, 2, 3,
+  ]), gl.STATIC_DRAW);
 
   return function(targetSrc: string, strokeWidth: number, strokeColor: {r: number, g: number, b: number}) {
     const image = new Image();
