@@ -1,5 +1,5 @@
 function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidth: number, strokeColor: {r: number, g: number, b: number}) {
-  const gl = canvas.getContext("webgl");
+  const gl = canvas.getContext("webgl2");
 
   if (!gl) {
     alert("Unable to initialize WebGL. Your browser or machine may not support it.");
@@ -21,31 +21,52 @@ function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidt
         vTextureCoord = aTextureCoord;
       }`;
 
-    const [r, g, b] = [strokeColor.r / 255, strokeColor.g / 255, strokeColor.b / 255];
     const fragmentShaderSource = `
       varying highp vec2 vTextureCoord;
       uniform sampler2D uSampler;
-      const int width = ${strokeWidth};
-      void paint(void) {
-        for (int i = -width; i <= width; i++) {
-          for (int j = -width; j <= width; j++) {
-            highp float fi = float(i);
-            highp float fj = float(j);
-            if (distance(vec2(fi, fj), vec2(0, 0)) > float(width)) {
-              continue;
-            }
-            highp float fi1 = fi / ${image.width}.0;
-            highp float fj1 = fj / ${image.height}.0;
-            highp vec2 cp = vTextureCoord + vec2(fi1, fj1);
-            if (cp.x < 0.0 || cp.y < 0.0 || cp.x >= 1.0 || cp.y >= 1.0) {
-              continue;
-            }
-            if (texture2D(uSampler, cp).w > 0.0) {
-              gl_FragColor = vec4(${r}, ${g}, ${b}, 1.0);
-              return;
-            }
-          }
+      uniform highp float width;
+      uniform highp vec4 strokeColor;
+      uniform highp vec2 imageSize;
+      
+      bool haveNeighborPixel(highp float fx, highp float fy) {
+        if (distance(vec2(fx, fy), vec2(0, 0)) > width) {
+          return false;
         }
+        highp float fi1 = fx / imageSize.x;
+        highp float fj1 = fy / imageSize.y;
+        highp vec2 cp = vTextureCoord + vec2(fi1, fj1);
+        if (cp.x < 0.0 || cp.y < 0.0 || cp.x >= 1.0 || cp.y >= 1.0) {
+          return false;
+        }
+        if (texture2D(uSampler, cp).w > 0.0) {
+          return true;
+        }
+        return false;
+      }
+
+      mediump vec4 paint(void) {
+        highp float fx = -width;
+        for (int i = 1; i != 2; i += 2) {
+
+          highp float fy = -width;
+          for (int j = 1; j != 2; j += 2) {
+
+            bool shouldBeOutlined = haveNeighborPixel(fx, fy);
+            if (shouldBeOutlined) {
+              return strokeColor;
+            }
+
+            fy += 1.0;
+            if (fy > width)
+              break;
+          }
+
+          fx += 1.0;
+          if (fx > width)
+            break;
+        }
+
+        return vec4(0.0, 0.0, 0.0, 0.0);
       }
       void main(void) {
         highp vec4 tex = texture2D(uSampler, vTextureCoord);
@@ -53,9 +74,7 @@ function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidt
           gl_FragColor = tex;
           return;
         }
-        // transparency sidehack
-        gl_FragColor = vec4(vec3(1,1,1) - tex.xyz, 1.0);
-        paint();
+        gl_FragColor = paint();
       }`;
 
     const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vertexShaderSource)!;
@@ -76,6 +95,9 @@ function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidt
     // look up uniform locations.
     const vertexPosition = gl.getAttribLocation(shaderProgram, "aVertexPosition");
     const textureCoord = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+    const strokeColorUniform = gl.getUniformLocation(shaderProgram, "strokeColor");
+    const imageSizeUniform = gl.getUniformLocation(shaderProgram, "imageSize");
+    const widthUniform = gl.getUniformLocation(shaderProgram, "width");
     const programInfo = {
       program: shaderProgram,
       attribLocations: {},
@@ -126,6 +148,9 @@ function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidt
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
+    gl.uniform1f(widthUniform, strokeWidth);
+    gl.uniform4f(strokeColorUniform, strokeColor.r / 255, strokeColor.g / 255, strokeColor.b / 255, 1.0);
+    gl.uniform2f(imageSizeUniform, image.width, image.height);
 
     gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
 
