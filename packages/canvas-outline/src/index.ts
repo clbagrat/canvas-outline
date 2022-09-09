@@ -160,7 +160,13 @@ function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidt
 
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 }
+
+let vertexShaderCache: WebGLShader | null = null;
+let fragmentShaderCache: WebGLShader | null = null;
 function loadShader(gl: WebGLRenderingContext, type: number, source: string) {
+  if (type == gl.VERTEX_SHADER && vertexShaderCache) return vertexShaderCache;
+  if (type == gl.FRAGMENT_SHADER && fragmentShaderCache) return fragmentShaderCache;
+  
   const shader = gl.createShader(type)!;
   gl.shaderSource(shader, source);
   gl.compileShader(shader);
@@ -169,6 +175,9 @@ function loadShader(gl: WebGLRenderingContext, type: number, source: string) {
     gl.deleteShader(shader);
     return null;
   }
+
+  if (type == gl.VERTEX_SHADER) vertexShaderCache = shader;
+  if (type == gl.FRAGMENT_SHADER) fragmentShaderCache = shader;
   return shader;
 }
 export { canvasOutliner }
