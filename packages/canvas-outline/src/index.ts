@@ -1,6 +1,6 @@
 function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidth: number, strokeColor: {r: number, g: number, b: number}) {
-  const gl = canvas.getContext("webgl2");
-
+  const gl = canvas.getContext("webgl", { preserveDrawingBuffer: true });
+  
   if (!gl) {
     alert("Unable to initialize WebGL. Your browser or machine may not support it.");
     return;
