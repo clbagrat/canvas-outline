@@ -1,4 +1,13 @@
-function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidth: number, strokeColor: {r: number, g: number, b: number}) {
+function parseHEXColor(color: string): {r: number, g: number, b: number} {
+  return {
+    r: +('0x' + color[1] + color[2]),
+    g: +('0x' + color[3] + color[4]),
+    b: +('0x' + color[5] + color[6]),
+  }
+}
+
+function canvasOutliner(canvas: HTMLCanvasElement, targetSrc: string, strokeWidth: number, strokeColorStr: string) {
+  const strokeColor: {r: number, g: number, b: number} = parseHEXColor(strokeColorStr);
   const gl = canvas.getContext("webgl", { preserveDrawingBuffer: true });
   
   if (!gl) {
