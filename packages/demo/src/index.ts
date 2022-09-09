@@ -1,4 +1,4 @@
-import { canvasOutliner } from 'canvas-outline';
+import {initOutliner} from 'canvas-outline';
 import './style.css';
 
 const dragContainer = document.querySelector('.drag-container')!;
@@ -7,6 +7,7 @@ const dragSkip = document.querySelector('.drag-skip')!;
 
 const canvasContainer = document.querySelector('.canvas-outline')!;
 const canvasNode = document.querySelector('canvas')!;
+const canvasOutliner = initOutliner(canvasNode);
 const saveImageButton = document.querySelector('#save-image')!;
 const backHomeButton = document.querySelector('#back-home')!;
 
@@ -49,7 +50,7 @@ class ImageReader {
       filePath = file;
       const strokeWidth = +strokeWidthInput.value;
       const strokeColor = parseHEXColor(strokeColorInput.value);
-      canvasOutliner(canvasNode, file, strokeWidth, strokeColor);
+      canvasOutliner(file, strokeWidth, strokeColor);
       toggleContainer();
     };
   }
@@ -86,7 +87,7 @@ backHomeButton.addEventListener('click', () => {
 dragSkip.addEventListener('click', () => {
   const strokeWidth = +strokeWidthInput.value;
   const strokeColor = parseHEXColor(strokeColorInput.value);
-  canvasOutliner(canvasNode, filePath, strokeWidth, strokeColor);
+  canvasOutliner(filePath, strokeWidth, strokeColor);
   toggleContainer();
 });
 
@@ -108,7 +109,7 @@ function handler() {
   const context = canvasNode.getContext('2d');
   context?.clearRect(0, 0, canvasNode.width, canvasNode.height);
   const strokeColor = parseHEXColor(strokeColorInputInteractive.value);
-  canvasOutliner(canvasNode, filePath, +strokeWidthInputInteractive.value, strokeColor);
+  canvasOutliner(filePath, +strokeWidthInputInteractive.value, strokeColor);
 }
 
 strokeWidthInputInteractive.addEventListener('change', handler);
