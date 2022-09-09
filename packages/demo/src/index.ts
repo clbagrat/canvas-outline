@@ -1,4 +1,4 @@
-import { canvasOutliner } from 'canvas-outline';
+import { canvasPureJSOutliner, canvasShaderOutliner } from 'canvas-outline';
 import './style.css';
 
 const dragContainer = document.querySelector('.drag-container')!;
@@ -6,9 +6,11 @@ const dragInput = document.querySelector('#drag-input')!;
 const dragSkip = document.querySelector('.drag-skip')!;
 
 const canvasContainer = document.querySelector('.canvas-outline')!;
-const canvasNode = document.querySelector('canvas')!;
+let canvasNode = document.querySelector('canvas')!;
 const saveImageButton = document.querySelector('#save-image')!;
 const backHomeButton = document.querySelector('#back-home')!;
+
+const strokeBackendInput: HTMLInputElement = document.querySelector('#strokeBackend')!;
 
 const strokeWidthInput: HTMLInputElement = document.querySelector('#strokeWidth')!;
 const strokeWidthInputInteractive: HTMLInputElement = document.querySelector('#strokeWidthInteractive')!;
@@ -23,6 +25,31 @@ let filePath: string = './pikachu.png';
 function toggleContainer() {
   dragContainer.classList.toggle('hidden');
   canvasContainer.classList.toggle('hidden');
+}
+
+function reinitCanvas() {
+  const parent = canvasNode.parentElement;
+  parent?.removeChild(canvasNode);
+  canvasNode = document.createElement('canvas');
+  parent?.appendChild(canvasNode);
+}
+
+let activeBackend = canvasPureJSOutliner;
+function getOutlineFunction() {
+  let backend = canvasPureJSOutliner;
+  if (strokeBackendInput.value == 'webgl') {
+    backend = canvasShaderOutliner;
+  } else if (strokeBackendInput.value == 'wasm') {
+
+  } else {
+    backend = canvasPureJSOutliner;
+  }
+
+  if (backend != activeBackend) {
+    reinitCanvas();
+    activeBackend = backend;
+  }
+  return activeBackend;
 }
 
 function parseHEXColor(color: string): {r: number, g: number, b: number} {
@@ -49,7 +76,7 @@ class ImageReader {
       filePath = file;
       const strokeWidth = +strokeWidthInput.value;
       const strokeColor = parseHEXColor(strokeColorInput.value);
-      canvasOutliner(canvasNode, file, strokeWidth, strokeColor);
+      getOutlineFunction()(canvasNode, file, strokeWidth, strokeColor);
       toggleContainer();
     };
   }
@@ -84,9 +111,11 @@ backHomeButton.addEventListener('click', () => {
 });
 
 dragSkip.addEventListener('click', () => {
+  //reinitCanvas();
+
   const strokeWidth = +strokeWidthInput.value;
   const strokeColor = parseHEXColor(strokeColorInput.value);
-  canvasOutliner(canvasNode, filePath, strokeWidth, strokeColor);
+  getOutlineFunction()(canvasNode, filePath, strokeWidth, strokeColor);
   toggleContainer();
 });
 
@@ -105,10 +134,9 @@ dragContainer.addEventListener('dragover', (event) => {
 });
 
 function handler() {
-  const context = canvasNode.getContext('2d');
-  context?.clearRect(0, 0, canvasNode.width, canvasNode.height);
   const strokeColor = parseHEXColor(strokeColorInputInteractive.value);
-  canvasOutliner(canvasNode, filePath, +strokeWidthInputInteractive.value, strokeColor);
+
+  getOutlineFunction()(canvasNode, filePath, +strokeWidthInputInteractive.value, strokeColor);
 }
 
 strokeWidthInputInteractive.addEventListener('change', handler);
