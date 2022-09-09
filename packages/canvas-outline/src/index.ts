@@ -13,7 +13,7 @@ const fragmentShaderSource = `
   uniform highp float width;
   uniform highp vec4 strokeColor;
   uniform highp vec2 imageSize;
-  
+
   bool haveNeighborPixel(highp vec2 f) {
     if (length(f) > width) {
       return false;
