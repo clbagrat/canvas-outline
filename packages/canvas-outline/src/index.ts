@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const vertexShaderSource = `
   attribute vec4 aVertexPosition;
   attribute vec2 aTextureCoord;
@@ -174,3 +175,7 @@ function loadShader(gl: WebGLRenderingContext, type: number, source: string) {
 }
 export {initOutliner}
 export default initOutliner
+=======
+export { canvasOutliner as canvasJSOutliner } from './backends/js';
+export { canvasOutliner as canvasShaderOutliner } from './backends/webgl';
+>>>>>>> d2990f00ed501357679534df9b6c1452b7e0303d
